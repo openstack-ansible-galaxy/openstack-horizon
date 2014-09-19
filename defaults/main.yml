@@ -1,0 +1,4 @@
+---
+# defaults file for keystone
+
+keystone_hostname: localhost
