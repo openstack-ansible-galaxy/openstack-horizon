@@ -27,7 +27,7 @@ Example Playbook
 
     - hosts: servers
       roles:
-         - { role: horizon, keystone_hostname: localhost }
+         - { role: openstack-horizon, keystone_hostname: localhost }
 
 License
 -------
