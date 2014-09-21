@@ -14,8 +14,12 @@ They are installed by this role, if not found.
 Role Variables
 --------------
 
-`keystone_hostname`:  Hostname/IP address of the controller node.
-                      Defaults to "localhost".
+### Keystone (must exist)
+
+| Name | Default value | Description | Note |
+|---  |---  |---  |--- |
+| `keystone_hostname` | `localhost` | Hostname/IP address of the controller node ||
+
 
 Dependencies
 ------------
