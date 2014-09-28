@@ -33,6 +33,13 @@ Example Playbook
       roles:
          - { role: openstack-horizon, keystone_hostname: localhost }
 
+---
+
+A complete Ansible playbook demo, which uses this role, is available here: <https://github.com/dguerri/vagrant-ansible-openstack>
+
+---
+
+
 License
 -------
 
