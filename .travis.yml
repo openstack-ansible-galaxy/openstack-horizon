@@ -2,8 +2,11 @@
 language: python
 python: "2.7"
 
+
 before_install:
   # Make sure everything's up to date.
+  - sudo apt-get install python-software-properties
+  - sudo add-apt-repository -y cloud-archive:icehouse
   - sudo apt-get update -qq
 
 
@@ -29,10 +32,10 @@ script:
 
   # Test role idempotency
   - >
-    ansible-playbook -i tests/inventory tests/test.yml --connection=local
-    --sudo | grep -q 'changed=0.*failed=0'
+    ansible-playbook -i tests/inventory tests/test.yml -t horizon
+    --connection=local --sudo | grep -q 'changed=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
 
   # Test Horizon setup
-  - curl -sf http://localhost/ | grep id_password
+  - curl -sf http://localhost/horizon | grep id_password
