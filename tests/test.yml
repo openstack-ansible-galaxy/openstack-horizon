@@ -44,3 +44,5 @@
 
     - role: openstack-horizon
       keystone_hostname: 127.0.0.1
+      tags:
+        - horizon
