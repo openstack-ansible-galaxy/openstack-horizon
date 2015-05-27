@@ -2,8 +2,8 @@ Horizon OpenStack Ansible Role
 =========
 
 **Status**
-* [![Build Status](https://travis-ci.org/dguerri/openstack-horizon.svg?branch=master)](https://travis-ci.org/dguerri/openstack-horizon) on master branch
-* [![Build Status](https://travis-ci.org/dguerri/openstack-horizon.svg?branch=development)](https://travis-ci.org/dguerri/openstack-horizon) on development branch
+* [![Build Status](https://travis-ci.org/openstack-ansible-galaxy/openstack-horizon.svg?branch=master)](https://travis-ci.org/openstack-ansible-galaxy/openstack-horizon) on master branch
+* [![Build Status](https://travis-ci.org/openstack-ansible-galaxy/openstack-horizon.svg?branch=development)](https://travis-ci.org/openstack-ansible-galaxy/openstack-horizon) on development branch
 * [![Ansible Galaxy](http://img.shields.io/badge/dguerri-openstack--horizon-blue.svg)](https://galaxy.ansible.com/list#/roles/1769) on Ansible Galaxy
 
 OpenStack Horizon dashboard installation
