@@ -16,6 +16,8 @@ Requirements
 apache2 and libapache2-mod-wsgi are needed.
 They are installed by this role, if not found.
 
+For RHEL/CentOS, RHOSP or RDO repositories are needed.
+
 Role Variables
 --------------
 
@@ -44,6 +46,9 @@ A complete Ansible playbook demo, which uses this role, is available on Github (
 
 ---
 
+Credits
+-------
+RedHat support implemented by Abel Boldú <abel.boldu@gmx.com>
 
 License
 -------

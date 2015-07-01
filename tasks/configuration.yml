@@ -18,8 +18,21 @@
 #
 
 - name: Configure Horizon
-  lineinfile: dest=/etc/openstack-dashboard/local_settings.py
+  lineinfile: dest={{ dashboard_settings }}
               regexp=^OPENSTACK_HOST
               line="OPENSTACK_HOST = '{{ keystone_hostname }}'"
+  notify:
+    - Restart Apache2
+
+- name: Allow all hosts
+  lineinfile: dest={{ dashboard_settings }}
+              regexp=^ALLOWED_HOSTS
+              line="ALLOWED_HOSTS = ['*']"
+  when: ansible_os_family == 'RedHat'
+  notify:
+    - Restart Apache2
+
+- name: Extend horizon session timeout
+  lineinfile: dest={{ dashboard_settings }} line="SESSION_TIMEOUT=604800"
   notify:
     - Restart Apache2
