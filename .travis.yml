@@ -1,41 +1,20 @@
----
 language: python
-python: "2.7"
-
-
+python: '2.7'
 before_install:
-  # Make sure everything's up to date.
-  - sudo apt-get install python-software-properties
-  - sudo add-apt-repository -y cloud-archive:icehouse
-  - sudo apt-get update -qq
-
-
+- sudo apt-get install python-software-properties
+- sudo add-apt-repository -y cloud-archive:icehouse
+- sudo apt-get update -qq
 install:
-  # Install Ansible.
-  - sudo pip install ansible
-
-  # Add ansible.cfg to pick up roles path.
-  - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
-
-  # Install required ansible roles
-  - ansible-galaxy install dguerri.openstack-keystone,2.0.0
-
-
+- sudo pip install ansible
+- '{ echo ''[defaults]''; echo ''roles_path = ../''; } >> ansible.cfg'
+- ansible-galaxy install dguerri.openstack-keystone,2.0.0
 script:
-  # Check the role/playbook's syntax.
-  - ansible-playbook -i tests/inventory tests/test.yml --syntax-check
-
-  # Run the role/playbook with ansible-playbook.
-  - >
-    ansible-playbook -i tests/inventory tests/test.yml --connection=local
-    --sudo
-
-  # Test role idempotency
-  - >
-    ansible-playbook -i tests/inventory tests/test.yml -t horizon
-    --connection=local --sudo | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
-
-  # Test Horizon setup
-  - curl -sf http://localhost/horizon | grep id_password
+- ansible-playbook -i tests/inventory tests/test.yml --syntax-check
+- |
+  ansible-playbook -i tests/inventory tests/test.yml --connection=local --sudo
+- |
+  ansible-playbook -i tests/inventory tests/test.yml -t horizon --connection=local --sudo | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
+- curl -sf http://localhost/horizon | grep id_password
+notifications:
+  slack:
+    secure: a+Ac9AvX/pL8wZBDb0vpyik/joErMITIiyWMJQiXLbfTFopw+xMWv3snNkBq3I0REf1U89217jD6JwiFaAS+8Iy6jwrGv2hS/anz/M2qVKK7hOB7H5kWUKr6iP5I4240pF5GyUyofAwB+A/MKTaGIVqCbsmzs/5wAuu32V9Lj23a5Ji3Y4tF4+xoRGGTeTWlxJXsceFZ8hqE5RyV6a01zyW6QWUwPAgxq4XkdEQoscQ7G3bV0Vd3S2Wq7amrzgZy99LAXK+QWtkhaCgWd21jxXIkhtANZCymd5m5KWIE2tSlh2r2S2O3/yF8UXXP68iqWpII0EXe9hqdLAp+Lb1vCtxb4EcOaQUShE+o/3u6370GRy7SbUD/+brjOe9TunnajHBj8I87rlw5rGf2NkOy+JgPT4VwRBAenSwhURZ3Zc+vl6iCO3S+3li3ag/FP24JcGDWVW0/9acN6EQTTTuJCGuzEJQEYDS8NMiI7dtw/x8MByD0tte10U42YipRyZdVm/I/XmwObkprgd3R8KUZZKLiipgkNKIH3NZr+/nVOU8HS2sxuYhat4Ob1YB3nmKn7Dc2/1/Opp+tQjQxB6QpjYhlltOx1fZJmAVpOBrRxy1JREnfLLCz02ZrFDO11pSUGXetRsAxtUUtWWc54M0XOF6uz+z/9DK8OZQ/KYPhR74=
