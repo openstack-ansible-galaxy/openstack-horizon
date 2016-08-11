@@ -1,22 +1,16 @@
 ---
 galaxy_info:
-  author: Davide Guerri
-  description:
-  company: None
-  license: Apache
-  min_ansible_version: 1.7
+  author: 'Davide Guerri'
+  license: 'Apache'
+  min_ansible_version: 2.0
   categories:
-    - cloud
+    - 'cloud'
   dependencies: []
   platforms:
-    - name: Ubuntu
+    - name: 'Ubuntu'
       versions:
-        - precise
-        - quantal
-        - raring
-        - saucy
-        - trusty
-    - name: EL
+        - 'trusty'
+        - 'xenial'
+    - name: 'EL'
       versions:
-        - 6
         - 7

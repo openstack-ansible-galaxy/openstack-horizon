@@ -24,6 +24,3 @@
 - include: configuration.yml
 
 - meta: flush_handlers
-
-- name: Make sure Apache is started
-  service: name={{ apache2_service }} state=started

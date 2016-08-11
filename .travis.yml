@@ -1,20 +1,63 @@
-language: python
-python: '2.7'
-before_install:
-- sudo apt-get install python-software-properties
-- sudo add-apt-repository -y cloud-archive:icehouse
-- sudo apt-get update -qq
+---
+
+env:
+  global:
+    - ANSIBLE_FORCE_COLOR: True
+    - ANSIBLE_LOG_PATH: './ansible.log'
+    - ANSIBLE_ROLES_PATH: '../'
+  matrix:
+    - distribution: 'centos'
+      version: 7
+      run_opts: '--privileged --volume="/sys/fs/cgroup:/sys/fs/cgroup:ro"'
+    - distribution: 'ubuntu'
+      version: 14.04
+      run_opts: ''
+    - distribution: 'ubuntu'
+      version: 16.04
+      run_opts: '--privileged --volume="/sys/fs/cgroup:/sys/fs/cgroup:ro"'
+
+language: 'python'
+
+python:
+  - '2.7'
+
+sudo: 'required'
+
 install:
-- sudo pip install ansible
-- '{ echo ''[defaults]''; echo ''roles_path = ../''; } >> ansible.cfg'
-- ansible-galaxy install dguerri.openstack-keystone,2.0.0
+  # Install test requirements
+  - 'pip install -r requirements-devel.txt'
+  - |
+    if [ -f tests/requirements.yml ]; then
+      ansible-galaxy install -r tests/requirements.yml
+    fi
+before_script:
+  # Build the container under test and run it.
+  - >-
+    docker build
+    --file=tests/Dockerfile.${distribution}-${version}
+    --tag=${distribution}-${version}
+    tests
+  - >-
+    docker run
+    --add-host="docker:$(/sbin/ip route | awk '/default/ { print $3 }')"
+    --detach
+    --name="container"
+    ${run_opts} ${distribution}-${version}
 script:
-- ansible-playbook -i tests/inventory tests/test.yml --syntax-check
-- |
-  ansible-playbook -i tests/inventory tests/test.yml --connection=local --sudo
-- |
-  ansible-playbook -i tests/inventory tests/test.yml -t horizon --connection=local --sudo | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
-- curl -sf http://localhost/horizon | grep id_password
+  # Check syntax of YAML files.
+  - 'yamllint -c .yamllint.conf .'
+
+  # Check syntax of role.
+  - 'ansible-playbook -i container, -c docker tests/test.yml --syntax-check'
+
+  # Run role.
+  - 'ansible-playbook -i container, -c docker tests/test.yml --diff --verbose'
+
+  # Run role again to check idempotence failure.
+  - 'ansible-playbook -i container, -c docker tests/test.yml --diff --verbose'
+
+  # Detect idempotence failure.
+  - 'tail -n 1 ansible.log | grep -Eq "changed=0 +unreachable=0 +failed=0"'
+
 notifications:
-  slack:
-    secure: a+Ac9AvX/pL8wZBDb0vpyik/joErMITIiyWMJQiXLbfTFopw+xMWv3snNkBq3I0REf1U89217jD6JwiFaAS+8Iy6jwrGv2hS/anz/M2qVKK7hOB7H5kWUKr6iP5I4240pF5GyUyofAwB+A/MKTaGIVqCbsmzs/5wAuu32V9Lj23a5Ji3Y4tF4+xoRGGTeTWlxJXsceFZ8hqE5RyV6a01zyW6QWUwPAgxq4XkdEQoscQ7G3bV0Vd3S2Wq7amrzgZy99LAXK+QWtkhaCgWd21jxXIkhtANZCymd5m5KWIE2tSlh2r2S2O3/yF8UXXP68iqWpII0EXe9hqdLAp+Lb1vCtxb4EcOaQUShE+o/3u6370GRy7SbUD/+brjOe9TunnajHBj8I87rlw5rGf2NkOy+JgPT4VwRBAenSwhURZ3Zc+vl6iCO3S+3li3ag/FP24JcGDWVW0/9acN6EQTTTuJCGuzEJQEYDS8NMiI7dtw/x8MByD0tte10U42YipRyZdVm/I/XmwObkprgd3R8KUZZKLiipgkNKIH3NZr+/nVOU8HS2sxuYhat4Ob1YB3nmKn7Dc2/1/Opp+tQjQxB6QpjYhlltOx1fZJmAVpOBrRxy1JREnfLLCz02ZrFDO11pSUGXetRsAxtUUtWWc54M0XOF6uz+z/9DK8OZQ/KYPhR74=
+  webhooks: 'https://galaxy.ansible.com/api/v1/notifications/'
