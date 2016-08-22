@@ -18,10 +18,11 @@
 #
 
 - name: Install horizon application and dependencies
-  yum: name="{{ item }}" state=present
+  yum:
+    name: '{{ item }}'
+    state: present
   with_items:
-    - httpd
-    - memcached
-    - mod_wsgi
-    - openstack-dashboard
-    - openstack-dashboard-theme
+    - 'httpd'
+    - 'memcached'
+    - 'mod_wsgi'
+    - 'openstack-dashboard'

@@ -1,0 +1,11 @@
+---
+
+- name: 'openstack-repo'
+  src: 'abelboldu.openstack-repo'
+
+- name: 'openstack-keystone'
+  src: 'https://github.com/openstack-ansible-galaxy/openstack-keystone'
+  version: 'origin/features/mitaka'
+
+- name: 'mysql'
+  src: 'geerlingguy.mysql'
