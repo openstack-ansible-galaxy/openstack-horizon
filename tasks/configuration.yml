@@ -19,11 +19,11 @@
 
 - name: Configure openstack-dashboard local_settings file
   lineinfile:
-    dest: '{{ dashboard_settings }}'
+    dest: '{{ openstack_horizon_dashboard_settings }}'
     regexp: '{{ item.regexp }}'
     line: '{{ item.line }}'
   with_items:
-    - {regexp: '^OPENSTACK_HOST =', line: "OPENSTACK_HOST = '{{ keystone_hostname }}'"}
+    - {regexp: '^OPENSTACK_HOST =', line: "OPENSTACK_HOST = '{{ openstack_horizon_keystone_hostname }}'"}
     - {regexp: '^ALLOWED_HOSTS =', line: "ALLOWED_HOSTS = ['*', ]"}
     - {regexp: '^SESSION_ENGINE =', line: "SESSION_ENGINE = 'django.contrib.sessions.backends.cache'"}
     - {regexp: '^OPENSTACK_KEYSTONE_URL =', line: "OPENSTACK_KEYSTONE_URL = 'http://%s:5000/v3' % OPENSTACK_HOST"}
@@ -33,14 +33,14 @@
 
 - name: Remove default cache configuration
   replace:
-    dest: '{{ dashboard_settings }}'
+    dest: '{{ openstack_horizon_dashboard_settings }}'
     regexp: "CACHES = {\n    'default': {\n        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',\n    \
       },\n}"
     replace: ''
 
 - name: Configuare memcached session storage service
   blockinfile:
-    dest: '{{ dashboard_settings }}'
+    dest: '{{ openstack_horizon_dashboard_settings }}'
     marker: '# Memcached session storage'
     block: |
       CACHES = {
@@ -53,7 +53,7 @@
 
 - name: Configure API version
   blockinfile:
-    dest: '{{ dashboard_settings }}'
+    dest: '{{ openstack_horizon_dashboard_settings }}'
     marker: '# Keystone API version'
     block: |
       OPENSTACK_API_VERSIONS = {

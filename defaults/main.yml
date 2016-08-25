@@ -17,4 +17,4 @@
 # limitations under the License.
 #
 
-keystone_hostname: localhost
+openstack_horizon_keystone_hostname: localhost
