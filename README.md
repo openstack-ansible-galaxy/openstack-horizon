@@ -25,7 +25,7 @@ Role Variables
 
 | Name | Default value | Description | Note |
 |---  |---  |---  |--- |
-| `keystone_hostname` | `localhost` | Hostname/IP address of the controller node ||
+| `openstack_horizon_keystone_hostname` | `localhost` | Hostname/IP address of the controller node ||
 
 
 Dependencies
@@ -38,7 +38,7 @@ Example Playbook
 
     - hosts: servers
       roles:
-         - { role: openstack-horizon, keystone_hostname: localhost }
+         - { role: openstack-horizon, openstack_horizon_keystone_hostname: localhost }
 
 ---
 

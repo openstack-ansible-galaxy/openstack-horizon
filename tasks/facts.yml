@@ -20,11 +20,11 @@
 - name: Set service facts
   when: ansible_os_family == 'Debian'
   set_fact:
-    apache2_service: 'apache2'
-    dashboard_settings: '/etc/openstack-dashboard/local_settings.py'
+    openstack_horizon_apache2_service: 'apache2'
+    openstack_horizon_dashboard_settings: '/etc/openstack-dashboard/local_settings.py'
 
 - name: Set service facts
   when: ansible_os_family == 'RedHat'
   set_fact:
-    apache2_service: 'httpd'
-    dashboard_settings: '/etc/openstack-dashboard/local_settings'
+    openstack_horizon_apache2_service: 'httpd'
+    openstack_horizon_dashboard_settings: '/etc/openstack-dashboard/local_settings'
