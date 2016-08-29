@@ -30,6 +30,7 @@
     - {regexp: '^OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT =', line: 'OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = True'}
     - {regexp: '^OPENSTACK_KEYSTONE_DEFAULT_DOMAIN =', line: "OPENSTACK_KEYSTONE_DEFAULT_DOMAIN = 'default'"}
     - {regexp: '^OPENSTACK_KEYSTONE_DEFAULT_ROLE =', line: "OPENSTACK_KEYSTONE_DEFAULT_ROLE = 'user'"}
+  notify: Restart Apache2
 
 - name: Remove default cache configuration
   replace:
@@ -37,6 +38,7 @@
     regexp: "CACHES = {\n    'default': {\n        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',\n    \
       },\n}"
     replace: ''
+  notify: Restart Apache2
 
 - name: Configuare memcached session storage service
   blockinfile:
@@ -50,6 +52,7 @@
           }
       }
   changed_when: False
+  notify: Restart Apache2
 
 - name: Configure API version
   blockinfile:
@@ -62,3 +65,4 @@
           'volume': 2,
       }
   changed_when: False
+  notify: Restart Apache2
