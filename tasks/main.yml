@@ -17,10 +17,7 @@
 # limitations under the License.
 #
 
-- meta: flush_handlers
-
 - include: facts.yml
 - include: packages.yml
 - include: configuration.yml
-
 - meta: flush_handlers
