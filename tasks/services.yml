@@ -1,0 +1,7 @@
+---
+
+- name: Start and enable Apache2
+  service:
+    enabled: True
+    name: '{{ openstack_horizon_apache2_service }}'
+    state: started
