@@ -43,7 +43,7 @@
 - name: Configuare memcached session storage service
   blockinfile:
     dest: '{{ openstack_horizon_dashboard_settings }}'
-    marker: '# Memcached session storage'
+    marker: '# {mark} Memcached session storage'
     block: |
       CACHES = {
           'default': {
@@ -51,18 +51,16 @@
               'LOCATION': 'localhost:11211',
           }
       }
-  changed_when: False
   notify: Restart Apache2
 
 - name: Configure API version
   blockinfile:
     dest: '{{ openstack_horizon_dashboard_settings }}'
-    marker: '# Keystone API version'
+    marker: '# {mark} Keystone API version'
     block: |
       OPENSTACK_API_VERSIONS = {
           'identity': 3,
           'image': 2,
           'volume': 2,
       }
-  changed_when: False
   notify: Restart Apache2
